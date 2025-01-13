@@ -20,13 +20,14 @@ echo "29b0f1e0211568ea66d6b729536ff84aed3b6cbc1c38540a7c80a391fd01616e $isofile"
 
 # mount the iso and containing filesystem squashfs 
 echo "Preparing..."
-umount squashfs
-umount iso
+umount squashfs 2> /dev/null
+umount iso 2> /dev/null
 
-rm $newisofile
-rm -r iso && mkdir iso
-rm -r squashfs && mkdir squashfs
-rm -r squashfs-mod && mkdir squashfs-mod
+rm -f $newisofile
+rm -f filesystem-mod.squashfs
+rm -rf iso && mkdir iso
+rm -rf squashfs && mkdir squashfs
+rm -rf squashfs-mod && mkdir squashfs-mod
 
 mount -o loop $isofile iso
 mount -o loop iso/live/filesystem.squashfs squashfs
@@ -54,7 +55,7 @@ EOT
 
 # make a new squashfs filesystem
 echo "Creating new squashfs filesystem..."
-rm filesystem-mod.squashfs
+
 mksquashfs squashfs-mod filesystem-mod.squashfs
 
 # create a new iso based on existing with updated filesystem and kernel files
@@ -77,11 +78,11 @@ xorriso \
 # some cleanup
 echo "Cleaning up..."
 
-umount squashfs
-umount iso
+umount squashfs 2> /dev/null
+umount iso 2> /dev/null
 rm -rf squashfs-mod
 rm -rf squashfs
 rm -rf iso
-rm filesystem-mod.squashfs
+rm -f filesystem-mod.squashfs
 
 echo "Done"
