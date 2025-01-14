@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ea
+set -e
 
 # the current and new name of the .iso file
 isofile=startos-0.3.5.1-39de098_x86_64-nonfree.iso
@@ -8,7 +8,7 @@ newisofile=startos-0.3.5.1-39de098_x86_64-nonfree-r8168.iso
 
 # install required dependencies for building an iso
 echo "Installing dependencies..."
-apt install xorriso squashfs-tools
+apt install xorriso squashfs-tools rsync
 
 # download iso file if it doesn't exist yet
 echo "Downloading start-os iso..."
@@ -20,8 +20,8 @@ echo "29b0f1e0211568ea66d6b729536ff84aed3b6cbc1c38540a7c80a391fd01616e $isofile"
 
 # mount the iso and containing filesystem squashfs 
 echo "Preparing..."
-umount squashfs 2> /dev/null
-umount iso 2> /dev/null
+umount squashfs || true
+umount iso || true
 
 rm -f $newisofile
 rm -f filesystem-mod.squashfs
@@ -78,8 +78,8 @@ xorriso \
 # some cleanup
 echo "Cleaning up..."
 
-umount squashfs 2> /dev/null
-umount iso 2> /dev/null
+umount squashfs || true
+umount iso || true
 rm -rf squashfs-mod
 rm -rf squashfs
 rm -rf iso
